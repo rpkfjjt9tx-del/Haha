@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamrah ❤️ Abbas</title>
+    <style>
+        :root { --pink: #ff4d6d; --bg: #ffe5ec; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--pink); text-align: center; min-height: 100vh; overflow-x: hidden; }
+        
+        #lock-screen { position: fixed; inset: 0; background: radial-gradient(circle, #ff758f, #800f2f); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; }
+        input, textarea { padding: 12px; border-radius: 20px; border: 2px solid var(--pink); margin: 10px; text-align: center; font-size: 16px; width: 250px; outline: none; }
+        
+        #page-content { display: none; padding: 20px; animation: fadeIn 1s; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; max-width: 400px; margin: 20px auto; }
+        .memory-card { background: white; border-radius: 15px; padding: 10px; border: 2px solid var(--pink); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .memory-card img { width: 100%; border-radius: 10px; height: 160px; object-fit: cover; }
+        
+        .page { display: none; padding: 30px; animation: fadeIn 0.8s; height: 80vh; flex-direction: column; justify-content: center; align-items: center; }
+        
+        button { background: var(--pink); color: white; padding: 14px 28px; border: none; border-radius: 30px; font-weight: bold; cursor: pointer; transition: 0.3s; margin: 10px; font-size: 16px; }
+        button:hover { transform: scale(1.05); background: #c9184a; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        #player-wrapper { position: absolute; top: -1000px; visibility: hidden; }
+    </style>
+</head>
+<body>
+
+    <div id="player-wrapper"><div id="player"></div></div>
+
+    <div id="lock-screen">
+        <h1 style="font-size: 50px; margin: 0;">🔒❤️</h1>
+        <h2>Hamrah ❤️ Abbas</h2>
+        <p>Enter our special date (DD.MM.YYYY)</p>
+        <input type="text" id="passInput" placeholder="18.05.2023">
+        <button onclick="checkPass()">Unlock My Heart</button>
+    </div>
+
+    <div id="page-content">
+        <h1>Our Memories 📸</h1>
+        <button id="music-btn" onclick="playMusic()">🎵 Play Our Song ❤️</button>
+        <div class="grid">
+            <div class="memory-card"><img src="1.PNG" alt="1"><p>The Beginning ❤️</p></div>
+            <div class="memory-card"><img src="2.PNG" alt="2"><p>Beautiful Us ✨</p></div>
+            <div class="memory-card"><img src="3.PNG" alt="3"><p>My Favorite 🥰</p></div>
+            <div class="memory-card"><img src="4.JPG" alt="4"><p>Forever Home 🫂</p></div>
+        </div>
+        <button onclick="startQuestions()" style="width: 80%;">Let's Play a Game ➡️</button>
+    </div>
+
+    <div class="page" id="q-page">
+        <h2 id="question-text"></h2>
+        <div id="input-area"><input type="text" id="ansInput"></div>
+        <div id="msg-area" style="display: none;"><textarea id="abbasMsg" placeholder="Type here, Abbas..."></textarea></div>
+        <br>
+        <button onclick="handleAnswer()">Next ❤️</button>
+        <p id="error-msg" style="color: darkred; display: none; font-weight: bold;">Wrong! Try again babyy... 💔</p>
+    </div>
+
+    <div class="page" id="final-page">
+        <h1 id="proposal-title">Abbas... 💍</h1>
+        <p id="proposal-text" style="font-size: 20px; font-weight: bold;">Will you be mine forever?</p>
+        <div id="btn-container">
+            <button onclick="celebrate()">YES! ❤️</button>
+            <button id="noBtn" onclick="sayNo()">NO 😭</button>
+        </div>
+    </div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        let player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '0', width: '0', videoId: 'dEIMJeBPccU',
+                playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'dEIMJeBPccU' }
+            });
+        }
+
+        function playMusic() { if(player && player.playVideo) { player.playVideo(); document.getElementById("music-btn").innerText = "🎶 Playing... ❤️"; } }
+
+        function checkPass() {
+            if(document.getElementById("passInput").value === "18.05.2023") {
+                document.getElementById("lock-screen").style.display = "none";
+                document.getElementById("page-content").style.display = "block";
+            } else { alert("Wrong date babyy! 🤫"); }
+        }
+
+        let currentQ = 0;
+        const questions = [
+            { q: "When did we first meet? (DD.MM.YYYY)", a: "23.07.2023" },
+            { q: "Our first intimacy date? (DD.MM.YYYY)", a: "10.03.2025" },
+            { q: "What is my favorite thing? 🍫", a: "kinder joy" },
+            { q: "Is there something you want to say to me? 💌", a: "type" }
+        ];
+
+        function startQuestions() {
+            document.getElementById("page-content").style.display = "none";
+            document.getElementById("q-page").style.display = "flex";
+            updateQuestion();
+        }
+
+        function updateQuestion() {
+            document.getElementById("question-text").innerText = questions[currentQ].q;
+            if(currentQ === 3) {
+                document.getElementById("input-area").style.display = "none";
+                document.getElementById("msg-area").style.display = "block";
+            }
+        }
+
+        function handleAnswer() {
+            let val = document.getElementById("ansInput").value.toLowerCase().trim();
+            if(currentQ === 3) {
+                if(document.getElementById("abbasMsg").value.length > 2) { showFinal(); }
+                else { alert("Say something sweet! ❤️"); }
+                return;
+            }
+            if(val === questions[currentQ].a) { currentQ++; updateQuestion(); }
+            else { document.getElementById("error-msg").style.display = "block"; }
+        }
+
+        function showFinal() {
+            document.getElementById("q-page").style.display = "none";
+            document.getElementById("final-page").style.display = "flex";
+        }
+
+        // The Savadippan Logic
+        function sayNo() {
+            document.getElementById("proposal-title").innerText = "சாவடிப்பேன்! 😡❤️";
+            document.getElementById("proposal-text").innerText = "என்றைக்குமே உனக்கு நான் தான்!";
+            document.getElementById("noBtn").style.display = "none";
+        }
+
+        function celebrate() {
+            document.getElementById("final-page").innerHTML = "<h1>💍❤️</h1><h1>YES! Forever!</h1><p>I Love You, Abbas!</p>";
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        }
+    </script>
+</body>
+</html>
