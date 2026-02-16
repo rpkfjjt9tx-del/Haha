@@ -20,8 +20,9 @@
         .memory-box img { width: 100%; height: 100%; object-fit: cover; display: none; border-radius: 10px; }
         .memory-text { display: none; font-size: 11px; color: white; font-weight: bold; margin-top: 5px; padding: 0 5px; }
 
-        button { background: var(--pink); color: white; padding: 12px 25px; border: none; border-radius: 25px; font-weight: bold; cursor: pointer; transition: 0.3s; margin: 10px; }
+        button { background: var(--pink); color: white; padding: 12px 25px; border: none; border-radius: 25px; font-weight: bold; cursor: pointer; transition: 0.3s; margin: 5px; }
         button:hover { transform: scale(1.05); background: var(--dark); }
+        .back-btn { background: #666; font-size: 12px; padding: 8px 15px; margin-top: 20px; }
 
         .page { display: none; padding: 30px; animation: fadeIn 0.8s; min-height: 60vh; flex-direction: column; justify-content: center; align-items: center; }
         .hint { font-size: 13px; color: #666; font-style: italic; }
@@ -70,6 +71,7 @@
         <h2>When did we first meet?</h2>
         <input type="text" id="ans1" placeholder="DD.MM.YYYY">
         <button onclick="check1()">Next ❤️</button>
+        <button class="back-btn" onclick="backToMain()">⬅ Back to Memories</button>
     </div>
 
     <div class="page" id="q2">
@@ -77,6 +79,7 @@
         <p class="hint">Hint: Ramadan</p>
         <input type="text" id="ans2" placeholder="DD.MM.YYYY">
         <button onclick="check2()">Continue ❤️</button>
+        <button class="back-btn" onclick="showPage('q1')">⬅ Back</button>
     </div>
 
     <div class="page" id="q3">
@@ -84,6 +87,7 @@
         <p class="hint">Hint: Kids like it!</p>
         <input type="text" id="ans3" placeholder="Type here...">
         <button onclick="check3()">Next ✨</button>
+        <button class="back-btn" onclick="showPage('q2')">⬅ Back</button>
     </div>
 
     <div class="page" id="q4">
@@ -91,6 +95,7 @@
         <textarea id="abbasMsg" placeholder="Type your heart out, Abbas..."></textarea>
         <br>
         <button onclick="showPage('final')">Send to Hammu ❤️</button>
+        <button class="back-btn" onclick="showPage('q3')">⬅ Back</button>
     </div>
 
     <div class="page" id="final">
@@ -100,6 +105,8 @@
             <button id="yesBtn" onclick="sayYes()">YES! ❤️</button>
             <button id="noBtn" onclick="sayNo()">NO 😭</button>
         </div>
+        <button id="final-back" class="back-btn" onclick="showPage('q4')">⬅ Back to Message</button>
+        
         <button id="voice-btn" onclick="playVoice()">🎤 Click to hear my voice 🎤</button>
     </div>
 
@@ -141,13 +148,28 @@
             box.querySelector('img').style.display = 'block';
             box.querySelector('.memory-text').innerText = text;
             box.querySelector('.memory-text').style.display = 'block';
-            box.style.height = 'auto'; // Adjust height to show text
+            box.style.height = 'auto';
         }
 
         function showPage(id) {
             document.getElementById("main-content").style.display = "none";
             document.querySelectorAll(".page").forEach(p => p.style.display = "none");
             document.getElementById(id).style.display = "flex";
+            
+            // Reset final page if going back
+            if(id === 'final') {
+                document.getElementById("final-back").style.display = "inline-block";
+                document.getElementById("btn-wrap").style.display = "block";
+                document.getElementById("voice-btn").style.display = "none";
+                document.getElementById("noBtn").style.display = "inline-block";
+                document.getElementById("f-title").innerText = "Abbas... 💍";
+                document.getElementById("f-text").innerHTML = "Will you be mine forever and ever?";
+            }
+        }
+
+        function backToMain() {
+            document.querySelectorAll(".page").forEach(p => p.style.display = "none");
+            document.getElementById("main-content").style.display = "block";
         }
 
         function check1() { if(document.getElementById("ans1").value === "23.07.2023") showPage('q2'); else alert("Wrong date! 🤫"); }
@@ -158,6 +180,7 @@
             document.getElementById("f-title").innerText = "சாவடிப்பேன் அப்பாஸ்! 😡❤️";
             document.getElementById("f-text").innerHTML = "உனக்கு என்றைக்குமே நான் தான்! எனக்கு என்றைக்குமே நீ தான்!<br><br>இப்போ 'YES' சொல்லு!";
             document.getElementById("noBtn").style.display = "none";
+            document.getElementById("final-back").style.display = "none"; // Hide back button on anger screen
         }
 
         function sayYes() {
@@ -170,6 +193,7 @@
                 </p>
             `;
             document.getElementById("btn-wrap").style.display = "none";
+            document.getElementById("final-back").style.display = "none"; // Hide back button after Yes
             document.getElementById("voice-btn").style.display = "inline-block";
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         }
