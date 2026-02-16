@@ -5,22 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hamrah ❤️ Abbas</title>
     <style>
-        :root { --pink: #ff4d6d; --bg: #ffe5ec; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--pink); text-align: center; min-height: 100vh; overflow-x: hidden; }
+        :root { --pink: #ff4d6d; --bg: #ffe5ec; --dark: #800f2f; }
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--dark); text-align: center; min-height: 100vh; overflow-x: hidden; }
         
+        /* Lock Screen */
         #lock-screen { position: fixed; inset: 0; background: radial-gradient(circle, #ff758f, #800f2f); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; }
-        input, textarea { padding: 12px; border-radius: 20px; border: 2px solid var(--pink); margin: 10px; text-align: center; font-size: 16px; width: 250px; outline: none; }
+        input, textarea { padding: 12px; border-radius: 20px; border: 2px solid var(--pink); margin: 10px; text-align: center; font-size: 16px; width: 260px; outline: none; }
         
-        #page-content { display: none; padding: 20px; animation: fadeIn 1s; }
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; max-width: 400px; margin: 20px auto; }
-        .memory-card { background: white; border-radius: 15px; padding: 10px; border: 2px solid var(--pink); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .memory-card img { width: 100%; border-radius: 10px; height: 160px; object-fit: cover; }
+        /* Main Container */
+        #main-content { display: none; padding: 20px; animation: fadeIn 1s; }
         
-        .page { display: none; padding: 30px; animation: fadeIn 0.8s; height: 80vh; flex-direction: column; justify-content: center; align-items: center; }
+        /* Timer Style */
+        #timer { background: white; padding: 15px; border-radius: 20px; margin: 15px auto; max-width: 350px; border: 2px dashed var(--pink); font-weight: bold; }
         
-        button { background: var(--pink); color: white; padding: 14px 28px; border: none; border-radius: 30px; font-weight: bold; cursor: pointer; transition: 0.3s; margin: 10px; font-size: 16px; }
-        button:hover { transform: scale(1.05); background: #c9184a; }
-        
+        /* Memories Grid (6 Photos) */
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 400px; margin: 20px auto; }
+        .card { background: white; border-radius: 15px; padding: 8px; border: 2px solid var(--pink); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .card img { width: 100%; height: 140px; border-radius: 10px; object-fit: cover; background: #f0f0f0; }
+        .card p { margin: 5px 0 0; font-size: 13px; font-weight: bold; }
+
+        /* Buttons */
+        button { background: var(--pink); color: white; padding: 12px 25px; border: none; border-radius: 25px; font-weight: bold; cursor: pointer; transition: 0.3s; margin: 10px; font-size: 15px; }
+        button:hover { transform: scale(1.05); background: var(--dark); }
+
+        /* Question Section */
+        .page { display: none; padding: 30px; animation: fadeIn 0.8s; min-height: 60vh; flex-direction: column; justify-content: center; align-items: center; }
+        .hint { font-size: 13px; color: #666; font-style: italic; margin-bottom: 5px; }
+
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         #player-wrapper { position: absolute; top: -1000px; visibility: hidden; }
     </style>
@@ -30,39 +41,70 @@
     <div id="player-wrapper"><div id="player"></div></div>
 
     <div id="lock-screen">
-        <h1 style="font-size: 50px; margin: 0;">🔒❤️</h1>
+        <h1 style="font-size: 45px; margin: 0;">🔓❤️</h1>
         <h2>Hamrah ❤️ Abbas</h2>
-        <p>Enter our special date (DD.MM.YYYY)</p>
-        <input type="text" id="passInput" placeholder="18.05.2023">
-        <button onclick="checkPass()">Unlock My Heart</button>
+        <p>Hint: Our Anniversary (DD.MM.YYYY)</p>
+        <input type="text" id="passInput" placeholder="Enter Date...">
+        <button onclick="checkPass()">Unlock Our Love</button>
     </div>
 
-    <div id="page-content">
-        <h1>Our Memories 📸</h1>
-        <button id="music-btn" onclick="playMusic()">🎵 Play Our Song ❤️</button>
-        <div class="grid">
-            <div class="memory-card"><img src="1.PNG" alt="1"><p>The Beginning ❤️</p></div>
-            <div class="memory-card"><img src="2.PNG" alt="2"><p>Beautiful Us ✨</p></div>
-            <div class="memory-card"><img src="3.PNG" alt="3"><p>My Favorite 🥰</p></div>
-            <div class="memory-card"><img src="4.JPG" alt="4"><p>Forever Home 🫂</p></div>
+    <div id="main-content">
+        <h1>Together Forever ❤️</h1>
+        
+        <div id="timer">
+            <p style="margin:0; font-size: 14px;">We've been together for:</p>
+            <div id="time-display" style="font-size: 18px; color: var(--pink); margin-top: 5px;"></div>
         </div>
-        <button onclick="startQuestions()" style="width: 80%;">Let's Play a Game ➡️</button>
+
+        <button id="music-btn" onclick="playMusic()">🎵 Play Our Song ❤️</button>
+
+        <div class="grid">
+            <div class="card"><img src="1.PNG" alt="1"><p>First Meet ❤️</p></div>
+            <div class="card"><img src="2.PNG" alt="2"><p>Beautiful Us ✨</p></div>
+            <div class="card"><img src="3.PNG" alt="3"><p>My Favorite 🥰</p></div>
+            <div class="card"><img src="4.JPG" alt="4"><p>Forever Yours 🫂</p></div>
+            <div class="card"><img src="5.PNG" alt="5"><p>Sweet Love 🔒</p></div>
+            <div class="card"><img src="6.JPG" alt="6"><p>Soulmates 💍</p></div>
+        </div>
+
+        <button onclick="showPage('q1')" style="width: 85%;">Let's Answer Some Questions ➡️</button>
     </div>
 
-    <div class="page" id="q-page">
-        <h2 id="question-text"></h2>
-        <div id="input-area"><input type="text" id="ansInput"></div>
-        <div id="msg-area" style="display: none;"><textarea id="abbasMsg" placeholder="Type here, Abbas..."></textarea></div>
+    <div class="page" id="q1">
+        <h2>When did we first meet?</h2>
+        <p class="hint">Our first magical moment...</p>
+        <input type="text" id="ans1" placeholder="DD.MM.YYYY">
+        <button onclick="check1()">Next ❤️</button>
+        <p id="err1" style="color:red; display:none;">Wrong date babyy! 🤫</p>
+    </div>
+
+    <div class="page" id="q2">
+        <h2>Our first intimacy date?</h2>
+        <p class="hint">Hint: Ramadan</p>
+        <input type="text" id="ans2" placeholder="DD.MM.YYYY">
+        <button onclick="check2()">Continue ❤️</button>
+        <p id="err2" style="color:red; display:none;">Try again babyy... 💔</p>
+    </div>
+
+    <div class="page" id="q3">
+        <h2>What is my favorite thing?</h2>
+        <p class="hint">Hint: Kids like it!</p>
+        <input type="text" id="ans3" placeholder="Type here...">
+        <button onclick="check3()">Next ✨</button>
+    </div>
+
+    <div class="page" id="q4">
+        <h2>Is there something you want to say to me? 💌</h2>
+        <textarea id="abbasMsg" placeholder="Type your heart out, Abbas..."></textarea>
         <br>
-        <button onclick="handleAnswer()">Next ❤️</button>
-        <p id="error-msg" style="color: darkred; display: none; font-weight: bold;">Wrong! Try again babyy... 💔</p>
+        <button onclick="check4()">Send to Hammu ❤️</button>
     </div>
 
-    <div class="page" id="final-page">
-        <h1 id="proposal-title">Abbas... 💍</h1>
-        <p id="proposal-text" style="font-size: 20px; font-weight: bold;">Will you be mine forever?</p>
-        <div id="btn-container">
-            <button onclick="celebrate()">YES! ❤️</button>
+    <div class="page" id="final">
+        <h1 id="f-title">Abbas... 💍</h1>
+        <p id="f-text" style="font-size: 20px; font-weight: bold;">Will you be mine forever and ever?</p>
+        <div id="btn-wrap">
+            <button onclick="sayYes()">YES! ❤️</button>
             <button id="noBtn" onclick="sayNo()">NO 😭</button>
         </div>
     </div>
@@ -78,62 +120,48 @@
             });
         }
 
-        function playMusic() { if(player && player.playVideo) { player.playVideo(); document.getElementById("music-btn").innerText = "🎶 Playing... ❤️"; } }
+        function playMusic() { if(player) { player.playVideo(); document.getElementById("music-btn").innerText = "🎶 Playing Our Song..."; } }
 
         function checkPass() {
             if(document.getElementById("passInput").value === "18.05.2023") {
                 document.getElementById("lock-screen").style.display = "none";
-                document.getElementById("page-content").style.display = "block";
-            } else { alert("Wrong date babyy! 🤫"); }
+                document.getElementById("main-content").style.display = "block";
+                startTimer();
+            } else { alert("Wrong password, babyy! 🤫"); }
         }
 
-        let currentQ = 0;
-        const questions = [
-            { q: "When did we first meet? (DD.MM.YYYY)", a: "23.07.2023" },
-            { q: "Our first intimacy date? (DD.MM.YYYY)", a: "10.03.2025" },
-            { q: "What is my favorite thing? 🍫", a: "kinder joy" },
-            { q: "Is there something you want to say to me? 💌", a: "type" }
-        ];
-
-        function startQuestions() {
-            document.getElementById("page-content").style.display = "none";
-            document.getElementById("q-page").style.display = "flex";
-            updateQuestion();
+        function startTimer() {
+            const start = new Date("May 18, 2023 00:00:00").getTime();
+            setInterval(() => {
+                const now = new Date().getTime();
+                const d = now - start;
+                const days = Math.floor(d / 86400000);
+                const hrs = Math.floor((d % 86400000) / 3600000);
+                const mins = Math.floor((d % 3600000) / 60000);
+                const secs = Math.floor((d % 60000) / 1000);
+                document.getElementById("time-display").innerText = `${days} Days, ${hrs}h ${mins}m ${secs}s`;
+            }, 1000);
         }
 
-        function updateQuestion() {
-            document.getElementById("question-text").innerText = questions[currentQ].q;
-            if(currentQ === 3) {
-                document.getElementById("input-area").style.display = "none";
-                document.getElementById("msg-area").style.display = "block";
-            }
+        function showPage(id) {
+            document.getElementById("main-content").style.display = "none";
+            document.querySelectorAll(".page").forEach(p => p.style.display = "none");
+            document.getElementById(id).style.display = "flex";
         }
 
-        function handleAnswer() {
-            let val = document.getElementById("ansInput").value.toLowerCase().trim();
-            if(currentQ === 3) {
-                if(document.getElementById("abbasMsg").value.length > 2) { showFinal(); }
-                else { alert("Say something sweet! ❤️"); }
-                return;
-            }
-            if(val === questions[currentQ].a) { currentQ++; updateQuestion(); }
-            else { document.getElementById("error-msg").style.display = "block"; }
-        }
+        function check1() { if(document.getElementById("ans1").value === "23.07.2023") showPage('q2'); else document.getElementById("err1").style.display="block"; }
+        function check2() { if(document.getElementById("ans2").value === "10.03.2025") showPage('q3'); else document.getElementById("err2").style.display="block"; }
+        function check3() { if(document.getElementById("ans3").value.toLowerCase().includes("kinder joy")) showPage('q4'); else alert("Hint: Kids love it! 🍫"); }
+        function check4() { if(document.getElementById("abbasMsg").value.length > 2) showPage('final'); else alert("Say something sweet! ❤️"); }
 
-        function showFinal() {
-            document.getElementById("q-page").style.display = "none";
-            document.getElementById("final-page").style.display = "flex";
-        }
-
-        // The Savadippan Logic
         function sayNo() {
-            document.getElementById("proposal-title").innerText = "சாவடிப்பேன்! 😡❤️";
-            document.getElementById("proposal-text").innerText = "என்றைக்குமே உனக்கு நான் தான்!";
+            document.getElementById("f-title").innerText = "சாவடிப்பேன்! 😡❤️";
+            document.getElementById("f-text").innerHTML = "அப்பாஸ் உனக்கு என்றைக்குமே நான் தான்!<br>எனக்கு என்றைக்குமே நீ தான்! ❤️";
             document.getElementById("noBtn").style.display = "none";
         }
 
-        function celebrate() {
-            document.getElementById("final-page").innerHTML = "<h1>💍❤️</h1><h1>YES! Forever!</h1><p>I Love You, Abbas!</p>";
+        function sayYes() {
+            document.getElementById("final").innerHTML = "<h1>💍❤️</h1><h2>Hammu loves you so much ummmmmmw 💋💋</h2>";
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         }
     </script>
